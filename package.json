@@ -41,6 +41,7 @@
     "tslib": "^2.6.2",
     "typescript": "^5.1.6"
   },
+  "engineStrict": true,
   "engines": {
     "node": "^18",
     "npm": "^9"

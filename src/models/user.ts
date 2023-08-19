@@ -1,7 +1,7 @@
 import knexInstance from '../services/database';
 
 export interface User {
-  userId: number;
+  id: number;
   name: string;
   age: number;
   active: boolean;

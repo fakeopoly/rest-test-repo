@@ -19,7 +19,7 @@ export class UserController {
   }
 
   public async findUser(userId: number): Promise<User> {
-    const user: User | undefined = await Users().select('*').where('userId', userId).first();
+    const user: User | undefined = await Users().select('*').where('id', userId).first();
     if (!user) {
       throw new HttpResourceNotFound(`user with id ${userId} does not exist`);
     }
@@ -28,22 +28,22 @@ export class UserController {
   }
 
   public async updateUser(userId: number, newUser: NewUser): Promise<User> {
-    const user: User | undefined = await Users().select('*').where('userId', userId).first();
+    const user: User | undefined = await Users().select('*').where('id', userId).first();
     if (!user) {
       throw new HttpResourceNotFound(`user with id ${userId} does not exist`);
     }
 
-    const insertedUser: User[] = await Users().update(newUser).where('userId', userId).returning('*');
+    const insertedUser: User[] = await Users().update(newUser).where('id', userId).returning('*');
     return insertedUser[0];
   }
 
   public async deleteUser(userId: number): Promise<void> {
-    const user: User | undefined = await Users().select('*').where('userId', userId).first();
+    const user: User | undefined = await Users().select('*').where('id', userId).first();
     if (!user) {
       throw new HttpResourceNotFound(`user with id ${userId} does not exist`);
     }
 
-    await Users().delete().where('userId', userId);
+    await Users().delete().where('id', userId);
   }
 }
 

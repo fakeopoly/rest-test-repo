@@ -1,26 +1,69 @@
-# express-typescript-template
+# rest-test-repo
 
-Personal NodeJS template for express webapis.
+Setup with:
+```bash
+npm i
+```
 
-## Features
+Run dev with:
+```bash
+npm run start:dev
+```
 
-- Fully written in TypeScript
-- Full typings everywhere
-- Sensible `tsconfig.json`
-- Error handling
-- JSON Logging (pino) with pretty print during dev
-- Docker support (both `Yarn` and `NPM`)
-- Express routing
-- Controllers/Services/Routes structure
-- Development HotReload (ts-node-dev)
-- Unit testing (jest with `*.spec.ts` files)
-- [Volta](https://volta.sh/) support
-- Automatic files formatting on-commit with sensible defaults (prettier/pretty-quick/husky)
-- Express common middlewares included (morgan, etc)
-- Basic auth guard system
-- Postgres-ready (no ORMs)
-- Redis-ready
-- SIGTERM, SIGINT intercept for cleaner and faster shutdowns
-- HTTP validation (express-validator)
-- EditorConfig support
-- Very fast and optimized build with [esbuild](https://esbuild.github.io/)
+Build and run prod with:
+```bash
+npm run build
+npm run start
+```
+
+## Endpoints
+
+The user api allows simple CRUD manipulation of users with the following schema:
+```
+userId: number # primary key
+name: string(maxLength: 100) # name must be unique
+age: number(maxValue: 150)
+active: bool
+email: string(maxLength: 100) | null
+```
+
+all endpoints expect `Content-Type: application/json` and emit json data.
+
+Get all users:
+```http request
+GET http://localhost:9000/api/v1/users
+```
+
+Get user from id:
+```http request
+GET http://localhost:9000/api/v1/users/{userId}
+```
+
+Create new User:
+```http request
+POST http://localhost:9000/api/v1/users
+
+{
+	"name": "name",
+	"age": 12,
+	"active": true,
+	"email": "aa@bb.com" # email is not a required field
+}
+```
+
+Update user with id:
+```http request
+PUT http://localhost:9000/api/v1/users/{userId}
+
+{
+	"name": "name",
+	"age": 12,
+	"active": true,
+	"email": "aa@bb.com" # email is not a required field
+}
+```
+
+Delete user with id:
+```http request
+DELETE http://localhost:9000/api/v1/users/{userId}
+```

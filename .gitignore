@@ -1,6 +1,7 @@
 .idea
 .vscode
 .env*
+data.db
 
 .DS_Store
 .AppleDouble

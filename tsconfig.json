@@ -16,10 +16,11 @@
     "strictNullChecks": true,
     "noUnusedLocals": true,
     "noEmitOnError": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
-    "noUnusedParameters": false
+    "noUnusedParameters": false,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/*.ts",

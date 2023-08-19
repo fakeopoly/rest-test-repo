@@ -3,19 +3,17 @@ import express, { Express } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
-import compression from 'compression';
 import { createServer } from 'http';
 import { createSubLogger } from './logger';
 import { endpointNotFound, errorHandler } from './middlewares/error-handling';
-import redisClient from './services/redis';
-import demoRoute from './routes/demo-route';
+import userRoute from './routes/user.route';
 import { authGuard } from './middlewares/auth';
+import { initDb } from './services/database';
 
 const app: Express = express();
 const logger = createSubLogger('app');
 
 app.use(cors());
-app.use(compression());
 app.use(helmet());
 app.use(express.json());
 
@@ -31,13 +29,14 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use('/api/v1/demo', authGuard, demoRoute);
+app.use('/api/v1/users', authGuard, userRoute);
 
 app.use(endpointNotFound);
 app.use(errorHandler);
 
 const server = createServer(app);
 server.listen(SERVER_PORT, async () => {
+  await initDb();
   if (process.env.NODE_ENV === 'production') {
     logger.info(`server listening on port: ${SERVER_PORT}`);
   } else {
@@ -47,16 +46,16 @@ server.listen(SERVER_PORT, async () => {
 
 async function shutdownHook() {
   try {
-    await new Promise<void>((resolve, reject) => server.close((err) => {
-      if (err) {
-        return reject(err);
-      }
-      return resolve();
-    }));
+    await new Promise<void>((resolve, reject) =>
+      server.close((err) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve();
+      }),
+    );
   } catch (err) {
     logger.warn({ error: err }, 'server closed with errors');
-  } finally {
-    redisClient.disconnect();
   }
 }
 

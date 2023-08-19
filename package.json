@@ -7,7 +7,7 @@
   "scripts": {
     "build": "esbuild src/index.ts --platform=node --outdir=dist --bundle --minify --target=node18 --packages=external",
     "start": "node .",
-    "start:dev": "ts-node-dev --rs --watch .env src/index.ts | pino-pretty",
+    "start:dev": "cross-env NODE_ENV=development ts-node-dev --rs --watch .env src/index.ts | pino-pretty",
     "test": "jest",
     "format": "prettier -w .",
     "test:watch": "jest --watchAll"
@@ -30,6 +30,7 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.17.6",
     "@types/pouchdb": "^6.4.0",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.19.2",
     "husky": "^8.0.3",
     "jest": "^29.6.2",

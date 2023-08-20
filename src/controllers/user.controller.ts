@@ -13,10 +13,10 @@ export interface NewUser {
 
 export class UserController {
   public async findAll(): Promise<User[]> {
-    return Users().select('*');
+    return Users().select();
   }
 
-  public async createUser(newUser: NewUser): Promise<User | void> {
+  public async createUser(newUser: NewUser): Promise<User> {
     try {
       const insertedUser: User[] = await Users().insert(newUser).returning('*');
       return insertedUser[0];
@@ -31,7 +31,7 @@ export class UserController {
   }
 
   public async findUser(userId: number): Promise<User> {
-    const user: User | undefined = await Users().select('*').where('id', userId).first();
+    const user: User | undefined = await Users().select().where('id', userId).first();
     if (!user) {
       throw new HttpResourceNotFound(`user with id ${userId} does not exist`);
     }
@@ -41,7 +41,7 @@ export class UserController {
 
   public async updateUser(userId: number, newUser: NewUser): Promise<User> {
     try {
-      const user: User | undefined = await Users().select('*').where('id', userId).first();
+      const user: User | undefined = await Users().select().where('id', userId).first();
       if (!user) {
         throw new HttpResourceNotFound(`user with id ${userId} does not exist`);
       }
@@ -59,7 +59,7 @@ export class UserController {
   }
 
   public async deleteUser(userId: number): Promise<void> {
-    const user: User | undefined = await Users().select('*').where('id', userId).first();
+    const user: User | undefined = await Users().select().where('id', userId).first();
     if (!user) {
       throw new HttpResourceNotFound(`user with id ${userId} does not exist`);
     }

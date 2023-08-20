@@ -49,6 +49,15 @@ export class HttpResourceAlreadyExists extends HttpError {
   }
 }
 
+export class FakeopolyError extends Error {
+  constructor(
+    message: string,
+    public readonly success: boolean = false,
+  ) {
+    super(message);
+  }
+}
+
 export function endpointNotFound(req: Request, res: Response) {
   res.format({
     'text/html': () => res.status(404).send(`<html lang="en"><h1>Error 404: Endpoint not found</h1></html>`),
@@ -59,12 +68,21 @@ export function endpointNotFound(req: Request, res: Response) {
 }
 
 export function errorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-  const statusCode = err.status || 500;
-  let errorMsg = err.message || 'Internal Server Error';
-  if (statusCode === 500) {
-    logger.error(err, { errorMsg, statusCode });
+  let statusCode = undefined;
+  let errorMsg;
+  let success = undefined;
+
+  if (err.success != null) {
+    success = err.success;
+    errorMsg = err.message;
   } else {
-    logger.warn(err, { errorMsg, statusCode });
+    statusCode = err.status || 500;
+    errorMsg = err.message || 'Internal Server Error';
+    if (statusCode === 500) {
+      logger.error(err, { errorMsg, statusCode });
+    } else {
+      logger.warn(err, { errorMsg, statusCode });
+    }
   }
 
   // handle partial message already sent error with default handler
@@ -72,16 +90,10 @@ export function errorHandler(err: any, req: Request, res: Response, next: NextFu
     return next(err);
   }
 
-  // obscure error messages in prod.
-  if (process.env.NODE_ENV === 'production') {
-    errorMsg = undefined;
-  }
-
-  return res.status(statusCode).json({
-    error: {
-      message: errorMsg,
-      status: statusCode,
-      errors: err?.errors, // for validation errors only
-    },
+  return res.status(statusCode || 200).json({
+    success: success,
+    message: errorMsg,
+    status: statusCode,
+    errors: err?.errors, // for validation errors only
   });
 }

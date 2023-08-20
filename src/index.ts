@@ -7,6 +7,7 @@ import { createServer } from 'http';
 import { createSubLogger } from './logger';
 import { endpointNotFound, errorHandler } from './middlewares/error-handling';
 import userRoute from './routes/user.route';
+import fakeopolyRoute from './routes/fakeopoly.route';
 import { authGuard } from './middlewares/auth';
 import { initDb } from './services/database';
 
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1/users', authGuard, userRoute);
+app.use('/api/v1/fakeopoly', authGuard, fakeopolyRoute);
 
 app.use(endpointNotFound);
 app.use(errorHandler);

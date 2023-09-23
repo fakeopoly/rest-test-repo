@@ -38,7 +38,7 @@ type IAction = IBuyPropertyAction | IRollDiceAction;
 // @ts-ignore
 type IResponse = IBuyPropertyResponse | IRollDiceResponse;
 
-async function buyPropetery(data: IBuyPropertyAction): Promise<IBuyPropertyResponse> {
+async function buyProperty(data: IBuyPropertyAction): Promise<IBuyPropertyResponse> {
   if (Number(data.playerId) > 2) {
     throw new FakeopolyError('epic fail');
   }
@@ -69,7 +69,7 @@ router.post('/action', async (req: Request, res: Response) => {
   const action: IAction = req.body;
   switch (action.action) {
     case 'buy_property':
-      return res.json(await buyPropetery(action));
+      return res.json(await buyProperty(action));
     case 'roll_dice':
       return res.json(await rollDice(action));
     default:

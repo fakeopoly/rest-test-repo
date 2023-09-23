@@ -67,3 +67,31 @@ Delete user with id:
 ```http request
 DELETE http://localhost:9000/api/v1/users/{userId}
 ```
+
+### Fakeopoly
+
+```http request
+POST http://localhost:9000/api/v1/fakeopoly/action
+
+{
+  "action": "roll_dice",
+  "playerId": 1,
+  "data": {
+    "propertyId": 42,
+    "offerAmount": 300
+  }
+}
+```
+
+```http request
+POST http://localhost:9000/api/v1/fakeopoly/action
+
+{
+  "action": "buy_property",
+  "playerId": 1,
+  "data": {
+    "propertyId": 42,
+    "offerAmount": 299
+  }
+}
+```
